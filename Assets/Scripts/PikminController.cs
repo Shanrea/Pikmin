@@ -25,8 +25,8 @@ public class PikminController : MonoBehaviour
     [SerializeField] private bool m_isFollow;
     [SerializeField] private bool m_isComingBack;
     public Vector3 m_wantedPos;
-
-    private NavMeshAgent m_agent;
+    
+    private NavMeshAgent m_agent; 
     private Rigidbody m_rb;
     private Coroutine m_shootCoroutine;
     //public CapsuleCollider m_capsuleCollider;
@@ -81,7 +81,7 @@ public class PikminController : MonoBehaviour
         m_VFX.Play();
         m_VFXDirt.Play();
 
-        StartCoroutine(C_Delay());
+        StartCoroutine(C_Delay());       
     }
 
     public IEnumerator C_Delay()
@@ -114,13 +114,13 @@ public class PikminController : MonoBehaviour
 
     private void Update()
     {
-        if (Vector3.Distance(m_enemyController.m_target.position, transform.position) > m_rangeLaunch)
+        if(Vector3.Distance(m_enemyController.m_target.position , transform.position) > m_rangeLaunch)
         {
             IsComingBack = true;
             m_isFollow = false;
             m_rb.linearDamping = 0f;
         }
-        else
+        else 
         {
             IsComingBack = false;
             m_isFollow = true;
@@ -135,9 +135,9 @@ public class PikminController : MonoBehaviour
         }
         else if (IsComingBack == false)
         {
-            //m_VFX.Stop();
+            m_VFX.Stop();
         }
-
+        
         if (IsFollow == true)
         {
             m_enemyController.MaxSpeed = 5f;

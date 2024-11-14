@@ -26,8 +26,8 @@ public class ProjectileController : MonoBehaviour
         while (timer < duration)
         {
             timer += Time.deltaTime;
-            float xOffset = m_animationCurveHorizontal.Evaluate(timer / duration) * hOffset;
-            float yOffset = m_animationCurve.Evaluate(timer / duration) * vOffset;
+            float xOffset = m_animationCurveHorizontal.Evaluate(timer/duration) * hOffset;
+            float yOffset = m_animationCurve.Evaluate(timer/duration) * vOffset;
             Vector3 wantedPos = Vector3.Lerp(startPosition, targetPosition, timer / duration);
             transform.position = wantedPos + (Vector3.right * xOffset) + (Vector3.up * yOffset);
             yield return new WaitForEndOfFrame();

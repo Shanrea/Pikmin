@@ -3,7 +3,7 @@ using UnityEngine.AI;
 
 public class EnemyController : MonoBehaviour
 {
-    [Header("References")]
+    [Header("References")] 
     public Transform m_target;
     [SerializeField] private Rigidbody m_rb;
     [SerializeField] private GameObject m_self;
@@ -36,10 +36,10 @@ public class EnemyController : MonoBehaviour
         Quaternion rotation = Quaternion.LookRotation(rotationToPlayer);
 
         transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * m_rotationSpeed);
-
+        
         m_pathTimer += Time.deltaTime;
 
-        if (m_pathTimer >= m_pathDelay)
+        if(m_pathTimer >= m_pathDelay)
         {
             m_pathTimer = 0;
             CalculatePath();
@@ -53,7 +53,7 @@ public class EnemyController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (m_currentPath.corners.Length > 0)
+        if(m_currentPath.corners.Length > 0)
         {
             Vector3 dir = m_currentPath.corners[1] - transform.position;
             dir = dir.normalized;
