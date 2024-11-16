@@ -25,11 +25,10 @@ public class PikminController : MonoBehaviour
     [SerializeField] private bool m_isFollow;
     [SerializeField] private bool m_isComingBack;
     public Vector3 m_wantedPos;
-    
-    private NavMeshAgent m_agent; 
+
+    private NavMeshAgent m_agent;
     private Rigidbody m_rb;
     private Coroutine m_shootCoroutine;
-    //public CapsuleCollider m_capsuleCollider;
 
     public bool IsFollow { get => m_isFollow; set => m_isFollow = value; }
     public bool IsShoot { get => m_isShoot; set => m_isShoot = value; }
@@ -38,23 +37,15 @@ public class PikminController : MonoBehaviour
     private void Start()
     {
         m_agent = GetComponent<NavMeshAgent>();
-        //m_capsuleCollider = GetComponentInChildren<CapsuleCollider>();
         m_isShoot = false;
         m_isFollow = false;
         IsComingBack = false;
         m_rb = GetComponent<Rigidbody>();
     }
-    //public void Shoot(Vector3 raycastHit)
-    //{
-    //    if(m_isFollow == true)
-    //    {
-    //        StartCoroutine(C_Shoot(raycastHit));
-    //    }
-    //}
+
     private IEnumerator C_Shoot(Vector3 raycastHit)
     {
         m_enemyController.enabled = false;
-        //m_capsuleCollider.enabled = false;
         m_self.transform.LookAt(raycastHit);
         m_isShoot = true;
         m_isFollow = false;
@@ -73,7 +64,6 @@ public class PikminController : MonoBehaviour
             m_wantedPos = Vector3.Lerp(startPosition, raycastHit, timer / duration);
             transform.position = m_wantedPos + (Vector3.right * xOffset) + (Vector3.up * yOffset);
             yield return new WaitForEndOfFrame();
-            //m_capsuleCollider.enabled = true;
             IsComingBack = true;
         }
         transform.position = raycastHit;
@@ -81,12 +71,12 @@ public class PikminController : MonoBehaviour
         m_VFX.Play();
         m_VFXDirt.Play();
 
-        StartCoroutine(C_Delay());       
+        StartCoroutine(C_Delay());
     }
 
     public IEnumerator C_Delay()
     {
-        m_rb.constraints = /*RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ*/ RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+        m_rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
         m_self.GetComponentInChildren<Animator>().Play("A_Delay");
         yield return new WaitForSeconds(m_animationDelay);
         m_enemyController.enabled = true;
@@ -106,21 +96,18 @@ public class PikminController : MonoBehaviour
             m_shootCoroutine = null;
             transform.position = m_wantedPos;
             StartCoroutine(C_Delay());
-            //IsShoot = false;
-            //IsComingBack = true;
-            //IsFollow = false;
         }
     }
 
     private void Update()
     {
-        if(Vector3.Distance(m_enemyController.m_target.position , transform.position) > m_rangeLaunch)
+        if (Vector3.Distance(m_enemyController.m_target.position, transform.position) > m_rangeLaunch)
         {
             IsComingBack = true;
             m_isFollow = false;
             m_rb.linearDamping = 0f;
         }
-        else 
+        else
         {
             IsComingBack = false;
             m_isFollow = true;
@@ -131,13 +118,12 @@ public class PikminController : MonoBehaviour
         {
             m_enemyController.MaxSpeed = m_comingBackSpeed;
             m_enemyController.Acceleration = m_accelerationSpeed;
-            //m_VFXRun.Play();
         }
-        else if (IsComingBack == false)
+        else
         {
             m_VFX.Stop();
         }
-        
+
         if (IsFollow == true)
         {
             m_enemyController.MaxSpeed = 5f;
